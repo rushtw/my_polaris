@@ -10,6 +10,9 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 
+import { ConvexClientProvider } from "./ConvexClientProvider";
+
+
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
@@ -35,6 +38,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <ConvexClientProvider>
             <header className="flex items-center justify-end gap-4 p-4">
               <Show when="signed-out">
                 <SignInButton />
@@ -50,6 +54,7 @@ export default function RootLayout({
             </header>
 
             {children}
+            </ConvexClientProvider>
           </ThemeProvider>
         </body>
       </html>
