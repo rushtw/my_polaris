@@ -32,8 +32,3 @@ export const get1 = query({
   },
 });
 
-export const getProject = query({args:{}, handler: async (ctx) => {
-  return await ctx.db
-  .query("projects").collect();}});
-
-

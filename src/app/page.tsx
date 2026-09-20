@@ -22,10 +22,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 flex w-full max-w-5xl items-center justify-between font-mono text-sm">
-        <Button variant="destructive">Click me</Button>
-        <ModeToggle />
-      </div>
+      
 
       <div className="flex w-full max-w-sm gap-2">
         <Input
@@ -41,9 +38,9 @@ export default function Home() {
         </Button>
       </div>
 
-      {projects?.map(({ _id, name }) => (
-        <div className="border border-yellow-300 rounded-md p-4 mb-2" key={_id}>
-          {name}
+      {projects?.map(({ _id, ownerId, name }) => (
+        <div className="border border-yellow-300 rounded-md p-4 mb-2" key={_id.toString()}>
+          {name} ({ownerId})
         </div>
       ))}
     </main>

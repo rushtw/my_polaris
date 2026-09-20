@@ -53,6 +53,7 @@ export default function RootLayout({
               </Show>
             </header>
 
+            {/* This is where the main content of the page will be rendered, which is passed as children to the RootLayout component. It allows for a consistent layout across different pages while still rendering unique content for each page. */}
             {children}
             </ConvexClientProvider>
           </ThemeProvider>
