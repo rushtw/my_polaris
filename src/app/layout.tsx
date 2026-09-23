@@ -2,13 +2,7 @@ import type { Metadata } from "next";
 import { Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import {
-  ClerkProvider,
-  Show,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import { ConvexClientProvider } from "./ConvexClientProvider";
 
@@ -39,22 +33,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ConvexClientProvider>
-            <header className="flex items-center justify-end gap-4 p-4">
-              <Show when="signed-out">
-                <SignInButton />
-                <SignUpButton>
-                  <button className="bg-purple-700 text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
-                    Sign Up
-                  </button>
-                </SignUpButton>
-              </Show>
-              <Show when="signed-in">
-                <UserButton />
-              </Show>
-            </header>
-
-            {/* This is where the main content of the page will be rendered, which is passed as children to the RootLayout component. It allows for a consistent layout across different pages while still rendering unique content for each page. */}
-            {children}
+              {children} 
             </ConvexClientProvider>
           </ThemeProvider>
         </body>
