@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Convex Dev",
+      "type": "shell",
+      "command": "npx convex dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "group": "devServers"
+      }
+    },
+    {
+      "label": "Next Dev",
+      "type": "shell",
+      "command": "npm run dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "group": "devServers"
+      }
+    },
+    {
+      "label": "Inngest Dev",
+      "type": "shell",
+      "command": "& \"$env:LOCALAPPDATA\\inngest\\inngest.exe\" dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "group": "devServers"
+      }
+    },
+    {
+      "label": "Start All Dev Servers",
+      "dependsOn": ["Convex Dev", "Next Dev", "Inngest Dev"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ]
+}

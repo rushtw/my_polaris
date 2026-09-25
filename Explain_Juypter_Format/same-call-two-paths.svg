@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1528" viewBox="0 0 1000 1528" role="img" aria-labelledby="t d">
+<title id="t">Same Call, Two Paths</title>
+<desc id="d">The same generateText() call to Groq/xAI reached two ways: directly, where the browser's HTTP request stays open until the call finishes, versus via Inngest, where the browser gets an immediate queued response and the call runs later inside a retryable step.</desc>
+<style>@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap");</style>
+<rect width="1000" height="1528" fill="#fbfaf6"/>
+<text x="24" y="56" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="32" font-weight="700" letter-spacing="-0.3" fill="#211c11">Same Call, Two Paths</text>
+<text x="24.0" y="92.0" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="16" fill="#6d6450" xml:space="preserve">Both paths below make the exact same <tspan font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="14.4" fill="#8a6100">generateText()</tspan> call to Groq/xAI — the only thing</text>
+<text x="24.0" y="116.0" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="16" fill="#6d6450" xml:space="preserve">that changes is <tspan font-style="italic">where</tspan> that call sits and <tspan font-style="italic">who</tspan> <tspan font-style="italic">waits</tspan> for it. One is real code in this app today;</text>
+<text x="24.0" y="140.0" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="16" fill="#6d6450" xml:space="preserve">the other is illustrative, showing how the same call would look wrapped in an Inngest</text>
+<text x="24.0" y="164.0" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="16" fill="#6d6450" xml:space="preserve">function.</text>
+<rect x="24.5" y="204.5" width="951" height="875.2" rx="12" fill="#ffffff" stroke="#ddd3b6"/>
+<g transform="translate(40,224.0)">
+
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#211c11"></path>
+        </marker>
+        <marker id="arrowAccent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#b8860b"></path>
+        </marker>
+      </defs>
+
+      
+      <rect x="360" y="16" width="200" height="56" rx="8" fill="#f4efe1" stroke="#211c11" stroke-width="1.4"></rect>
+      <text x="460" y="50" text-anchor="middle" font-size="13" font-weight="600" fill="#211c11" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">Browser</text>
+
+      
+      <line x1="400" y1="72" x2="220" y2="144" stroke="#211c11" stroke-width="1.4" marker-end="url(#arrow)"></line>
+      <line x1="520" y1="72" x2="720" y2="144" stroke="#211c11" stroke-width="1.4" marker-end="url(#arrow)"></line>
+
+      
+      <text x="180" y="116" text-anchor="middle" font-size="13" font-weight="600" fill="#211c11" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">Direct — blocking</text>
+      <text x="740" y="116" text-anchor="middle" font-size="13" font-weight="600" fill="#211c11" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">Via Inngest — background</text>
+
+      
+      <g font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="12">
+        <rect x="60" y="150" width="240" height="66" rx="8" fill="none" stroke="#211c11" stroke-width="1.4"></rect>
+        <text x="180" y="178" text-anchor="middle" fill="#211c11">/api/demo/blocking</text>
+        <text x="180" y="196" text-anchor="middle" fill="#211c11" opacity="0.7">route.ts · real code</text>
+
+        <rect x="60" y="558" width="240" height="72" rx="8" fill="#f4efe1" stroke="#b8860b" stroke-width="1.8"></rect>
+        <text x="180" y="588" text-anchor="middle" fill="#211c11">Groq / xAI</text>
+        <text x="180" y="606" text-anchor="middle" fill="#211c11" opacity="0.75">generateText()</text>
+      </g>
+
+      <line x1="180" y1="218" x2="180" y2="556" stroke="#211c11" stroke-width="1.6" marker-end="url(#arrow)"></line>
+      <text x="192" y="380" font-size="11" fill="#211c11" font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace">await generateText()</text>
+      <text x="192" y="396" font-size="10" fill="#6d6450" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">the request just sits here, waiting</text>
+
+      
+      <path d="M 58,594 L 24,594 L 24,46 L 358,46" fill="none" stroke="#211c11" stroke-width="1.3" stroke-dasharray="4 4" opacity="0.8" marker-end="url(#arrow)"></path>
+      <text x="16" y="330" font-size="10.5" fill="#211c11" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" transform="rotate(-90 16 330)" text-anchor="middle">same response, ~2–5s later — request stayed open the whole time</text>
+
+      
+      <g font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="12">
+        <rect x="620" y="150" width="240" height="66" rx="8" fill="none" stroke="#211c11" stroke-width="1.4"></rect>
+        <text x="740" y="178" text-anchor="middle" fill="#211c11">/api/demo/inngest</text>
+        <text x="740" y="196" text-anchor="middle" fill="#211c11" opacity="0.7">route.ts · illustrative</text>
+
+        <rect x="620" y="258" width="240" height="62" rx="8" fill="none" stroke="#211c11" stroke-width="1.4"></rect>
+        <text x="740" y="284" text-anchor="middle" fill="#211c11" font-size="11">inngest.send(“recipe.requested”,</text>
+        <text x="740" y="300" text-anchor="middle" fill="#211c11" font-size="11">{ data: { prompt } })</text>
+
+        <rect x="620" y="350" width="240" height="58" rx="8" fill="#f4efe1" stroke="#b8860b" stroke-width="1.6"></rect>
+        <text x="740" y="384" text-anchor="middle" fill="#211c11">Inngest (queues event)</text>
+
+        <rect x="620" y="440" width="240" height="66" rx="8" fill="none" stroke="#211c11" stroke-width="1.4"></rect>
+        <text x="740" y="466" text-anchor="middle" fill="#211c11">your Inngest function</text>
+        <text x="740" y="484" text-anchor="middle" fill="#211c11" opacity="0.7">POST /api/inngest</text>
+
+        <rect x="620" y="558" width="240" height="72" rx="8" fill="#f4efe1" stroke="#b8860b" stroke-width="1.8"></rect>
+        <text x="740" y="584" text-anchor="middle" fill="#211c11">Groq / xAI</text>
+        <text x="740" y="602" text-anchor="middle" fill="#211c11" opacity="0.75">generateText()</text>
+        <text x="740" y="618" text-anchor="middle" fill="#8a6100" font-size="10.5">inside step.run(…)</text>
+      </g>
+
+      <line x1="740" y1="218" x2="740" y2="256" stroke="#211c11" stroke-width="1.4" marker-end="url(#arrow)"></line>
+      <line x1="740" y1="322" x2="740" y2="348" stroke="#211c11" stroke-width="1.4" marker-end="url(#arrow)"></line>
+      <line x1="740" y1="410" x2="740" y2="438" stroke="#211c11" stroke-width="1.4" marker-end="url(#arrow)"></line>
+      <line x1="740" y1="508" x2="740" y2="556" stroke="#211c11" stroke-width="1.6" marker-end="url(#arrow)"></line>
+      <text x="752" y="536" font-size="10.5" fill="#211c11" font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace">step.run(“generate”, …)</text>
+
+      
+      <path d="M 862,289 L 898,289 L 898,46 L 562,46" fill="none" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arrowAccent)"></path>
+      <text x="906" y="200" font-size="10.5" fill="#8a6100" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" transform="rotate(-90 906 200)" text-anchor="middle">200 OK — queued, returns immediately</text>
+
+      
+      <path d="M 700,556 L 700,510" fill="none" stroke="#211c11" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.7" marker-end="url(#arrow)"></path>
+      <text x="608" y="533" text-anchor="end" font-size="9.5" fill="#211c11" opacity="0.75" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">step result saved (durable) —</text>
+      <text x="608" y="546" text-anchor="end" font-size="9.5" fill="#211c11" opacity="0.75" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">browser already responded, not sent here</text>
+
+      
+      <line x1="300" y1="594" x2="620" y2="594" stroke="#b8860b" stroke-width="1.3" stroke-dasharray="2 5"></line>
+      <text x="460" y="646" text-anchor="middle" font-size="11.5" fill="#8a6100" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">identical generateText() call — same destination, different route to get there</text>
+
+      
+      <text x="180" y="686" text-anchor="middle" font-size="11" fill="#211c11" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">blocked the whole time — if this fails, the whole request fails, no retry</text>
+      <text x="740" y="686" text-anchor="middle" font-size="11" fill="#211c11" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">browser already moved on — Inngest retries just this step on failure</text>
+    
+</g>
+<line x1="40" y1="996.0" x2="960" y2="996.0" stroke="#ddd3b6"/>
+<text x="44.0" y="1020.0" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="13.6" fill="#6d6450" xml:space="preserve">Left: a real route in this app today — the HTTP request stays open for the entire <tspan font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="12.2" fill="#8a6100">generateText()</tspan> call. Right: illustrative — not built yet —</text>
+<text x="44.0" y="1040.4" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="13.6" fill="#6d6450" xml:space="preserve">showing the identical call wrapped in an Inngest <tspan font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="12.2" fill="#8a6100">step.run()</tspan>, reached only after the browser has already gotten an unrelated, immediate</text>
+<text x="44.0" y="1060.8" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="13.6" fill="#6d6450" xml:space="preserve">“queued” response.</text>
+<rect x="24.5" y="1093.7" width="951" height="60.8" rx="8" fill="#f1ead4" stroke="#ddd3b6"/>
+<text x="38.0" y="1117.2" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="13.6" fill="#6d6450" xml:space="preserve">Nothing on the right side exists in <tspan font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="12.2" fill="#8a6100">my_polaris</tspan> yet — <tspan font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="12.2" fill="#8a6100">route.ts</tspan>'s <tspan font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="12.2" fill="#8a6100">functions: []</tspan> is still empty. This diagram shows what plugging in one real job</text>
+<text x="38.0" y="1137.6" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="13.6" fill="#6d6450" xml:space="preserve">would look like, using the same <tspan font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="12.2" fill="#8a6100">generateText()</tspan> call already built for the blocking demo.</text>
+<rect x="24.5" y="1190.5" width="468.0" height="142.2" rx="8" fill="#ffffff" stroke="#ddd3b6"/>
+<path d="M33.0,1191.5 A7.5,7.5 0 0 0 25.5,1199.0 V1324.2 A7.5,7.5 0 0 0 33.0,1331.7" fill="none" stroke="#b8860b" stroke-width="3"/>
+<text x="43.0" y="1216.0" font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="11.5" letter-spacing="0.7" fill="#8a6100">SAME WORK, DIFFERENT WAITING</text>
+<text x="43.0" y="1244.0" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">Both paths call the identical <tspan font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="13.2" fill="#8a6100">generateText()</tspan>. The only thing</text>
+<text x="43.0" y="1266.0" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">that changes is whether the browser's HTTP request stays</text>
+<text x="43.0" y="1288.1" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">open for it (left) or gets an unrelated instant reply while the</text>
+<text x="43.0" y="1310.2" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">call happens later (right).</text>
+<rect x="507.5" y="1190.5" width="468.0" height="142.2" rx="8" fill="#ffffff" stroke="#ddd3b6"/>
+<path d="M516.0,1191.5 A7.5,7.5 0 0 0 508.5,1199.0 V1324.2 A7.5,7.5 0 0 0 516.0,1331.7" fill="none" stroke="#b8860b" stroke-width="3"/>
+<text x="526.0" y="1216.0" font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="11.5" letter-spacing="0.7" fill="#8a6100">FAILURE HANDLING</text>
+<text x="526.0" y="1244.0" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">On the left, a Groq timeout or error fails the whole request —</text>
+<text x="526.0" y="1266.0" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">the browser sees an error, nothing retries automatically. On</text>
+<text x="526.0" y="1288.1" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">the right, Inngest retries just the failed <tspan font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="13.2" fill="#8a6100">step.run()</tspan>, without</text>
+<text x="526.0" y="1310.2" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">re-sending the event or re-running earlier steps.</text>
+<rect x="24.5" y="1346.7" width="468.0" height="142.2" rx="8" fill="#ffffff" stroke="#ddd3b6"/>
+<path d="M33.0,1347.7 A7.5,7.5 0 0 0 25.5,1355.2 V1480.4 A7.5,7.5 0 0 0 33.0,1487.9" fill="none" stroke="#b8860b" stroke-width="3"/>
+<text x="43.0" y="1372.2" font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="11.5" letter-spacing="0.7" fill="#8a6100">WHERE THE RESULT GOES</text>
+<text x="43.0" y="1400.2" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">The left path's result flows straight back in the same response.</text>
+<text x="43.0" y="1422.2" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">The right path's result is saved by Inngest as durable step</text>
+<text x="43.0" y="1444.3" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">state — getting it to the browser needs a separate channel</text>
+<text x="43.0" y="1466.4" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">(polling, a webhook, a DB write) that isn't shown here.</text>
+<rect x="507.5" y="1346.7" width="468.0" height="142.2" rx="8" fill="#ffffff" stroke="#ddd3b6"/>
+<path d="M516.0,1347.7 A7.5,7.5 0 0 0 508.5,1355.2 V1480.4 A7.5,7.5 0 0 0 516.0,1487.9" fill="none" stroke="#b8860b" stroke-width="3"/>
+<text x="526.0" y="1372.2" font-family="IBM Plex Mono, ui-monospace, Menlo, Consolas, monospace" font-size="11.5" letter-spacing="0.7" fill="#8a6100">WHEN EACH MAKES SENSE</text>
+<text x="526.0" y="1400.2" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">Direct suits fast, single-shot calls where the user is actively</text>
+<text x="526.0" y="1422.2" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">waiting (exactly what the demo pages do today). Inngest suits</text>
+<text x="526.0" y="1444.3" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">slow, retry-worthy, or multi-step work the user shouldn't have</text>
+<text x="526.0" y="1466.4" font-family="IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="14.7" fill="#211c11" xml:space="preserve">to sit through.</text>
+</svg>
