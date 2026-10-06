@@ -20,3 +20,7 @@ export const useProjectsPartial = (limit: number) => {
 export const useCreateProject = () => {
   return useMutation(api.projects.create);
 };
+
+export const useRenameProject = () => {
+  return useMutation(api.projects.rename);
+};

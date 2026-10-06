@@ -6,6 +6,7 @@ import { SparkleIcon } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 
 import { cn } from "@/lib/utils";
+import { AppHeader } from "@/components/app-header";
 import { Button } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
 
@@ -52,7 +53,8 @@ export const ProjectsView = () => {
         open={newProjectDialogOpen}
         onOpenChange={setNewProjectDialogOpen}
       />
-      <div className="min-h-screen bg-sidebar flex flex-col items-center justify-center p-6 md:p-16">
+      <div className="relative min-h-screen bg-sidebar flex flex-col items-center justify-center p-6 md:p-16">
+        <AppHeader />
         <div className="w-full max-w-sm mx-auto flex flex-col gap-4 items-center">
 
           {/* Logo + title */}

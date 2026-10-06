@@ -1,54 +1,78 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowLeftIcon } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
+import { useState } from "react";
+import { Allotment } from "allotment";
 
-import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
+import { EditorView } from "@/features/editor/components/editor-view";
 
-import { useProject } from "../hooks/use-projects";
+import { FileExplorer } from "./file-explorer";
+import { PreviewView } from "./preview-view";
 
-const BackLink = () => (
-  <Link
-    href="/"
-    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-  >
-    <ArrowLeftIcon className="size-3" />
-    All projects
-  </Link>
-);
+const MIN_SIDEBAR_WIDTH = 200;
+const MAX_SIDEBAR_WIDTH = 800;
+const DEFAULT_SIDEBAR_WIDTH = 350;
+const DEFAULT_MAIN_SIZE = 1000;
 
-// Placeholder for the project page: the editor, file tree and AI chat come in later chapters
+const Tab = ({
+  label,
+  isActive,
+  onClick,
+}: {
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+}) => {
+  return (
+    <div
+      onClick={onClick}
+      className={cn(
+        "flex items-center gap-2 h-full px-3 cursor-pointer text-muted-foreground border-r hover:bg-accent/30",
+        isActive && "bg-background text-foreground",
+      )}
+    >
+      <span className="text-sm">{label}</span>
+    </div>
+  );
+};
+
+// The project page inside the IDE frame: Code | Preview tabs
 export const ProjectIdView = ({ projectId }: { projectId: string }) => {
-  const project = useProject(projectId);
+  const [activeView, setActiveView] = useState<"editor" | "preview">("editor");
 
   return (
-    <div className="min-h-screen bg-sidebar flex flex-col items-center justify-center p-6 md:p-16">
-      <div className="w-full max-w-sm mx-auto flex flex-col gap-4">
-        <BackLink />
+    <div className="h-full flex flex-col">
+      <nav className="h-8.75 flex items-center bg-sidebar border-b">
+        <Tab label="Code" isActive={activeView === "editor"} onClick={() => setActiveView("editor")} />
+        <Tab
+          label="Preview"
+          isActive={activeView === "preview"}
+          onClick={() => setActiveView("preview")}
+        />
+        {/* The Export popover goes on the right here (Chapter 15) */}
+      </nav>
 
-        {project === undefined && <Spinner className="size-4 text-ring" />}
-
-        {project === null && (
-          <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-semibold">Project not found</h1>
-            <p className="text-sm text-muted-foreground">
-              It may have been deleted, or the link is wrong.
-            </p>
-          </div>
-        )}
-
-        {project && (
-          <div className="flex flex-col gap-1">
-            <h1 className="text-2xl font-semibold truncate">{project.name}</h1>
-            <p className="text-xs text-muted-foreground">
-              Last updated {formatDistanceToNow(new Date(project.updatedAt), { addSuffix: true })}
-            </p>
-            <p className="mt-4 text-sm text-muted-foreground">
-              The editor comes in a later chapter.
-            </p>
-          </div>
-        )}
+      {/* Both tabs stay mounted; the inactive one is only made invisible,
+          so the editor keeps its state and the preview keeps running */}
+      <div className="flex-1 relative">
+        <div className={cn("absolute inset-0", activeView === "editor" ? "visible" : "invisible")}>
+          <Allotment defaultSizes={[DEFAULT_SIDEBAR_WIDTH, DEFAULT_MAIN_SIZE]}>
+            <Allotment.Pane
+              snap
+              minSize={MIN_SIDEBAR_WIDTH}
+              maxSize={MAX_SIDEBAR_WIDTH}
+              preferredSize={DEFAULT_SIDEBAR_WIDTH}
+            >
+              <FileExplorer projectId={projectId} />
+            </Allotment.Pane>
+            <Allotment.Pane>
+              <EditorView projectId={projectId} />
+            </Allotment.Pane>
+          </Allotment>
+        </div>
+        <div className={cn("absolute inset-0", activeView === "preview" ? "visible" : "invisible")}>
+          <PreviewView projectId={projectId} />
+        </div>
       </div>
     </div>
   );

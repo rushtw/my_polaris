@@ -54,6 +54,27 @@ export const getById = query({
   },
 });
 
+// Rename a project. Only its owner may do this; also bumps updatedAt.
+export const rename = mutation({
+  args: {
+    id: v.id("projects"),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await verifyAuth(ctx);
+
+    const project = await ctx.db.get(args.id);
+    if (!project || project.ownerId !== identity.subject) {
+      throw new Error("Project not found");
+    }
+
+    await ctx.db.patch(args.id, {
+      name: args.name,
+      updatedAt: Date.now(),
+    });
+  },
+});
+
 // Only the `limit` most recently updated projects
 export const getPartial = query({
   args: {
