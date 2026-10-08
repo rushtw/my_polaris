@@ -3,6 +3,7 @@ import { Inter, IBM_Plex_Mono } from "next/font/google";
 import "allotment/dist/style.css"; // resizable panes in the project IDE
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import { ConvexClientProvider } from "./ConvexClientProvider";
@@ -34,8 +35,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ConvexClientProvider>
-              {children} 
+              {children}
             </ConvexClientProvider>
+            {/* Pop-up messages, e.g. toast.error("A file named … already exists") */}
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>
