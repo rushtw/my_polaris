@@ -47,6 +47,71 @@ const assertNameIsFree = async (
 const touchProject = (ctx: MutationCtx, projectId: Id<"projects">, now: number) =>
   ctx.db.patch(projectId, { updatedAt: now });
 
+// A file the signed-in user may see, or null (missing, deleted, or someone else's).
+// Returning null instead of throwing keeps an editor tab of a deleted file from crashing.
+const getOwnedFileOrNull = async (ctx: QueryCtx | MutationCtx, fileId: Id<"files">) => {
+  const identity = await verifyAuth(ctx);
+  const file = await ctx.db.get(fileId);
+  if (!file) return null;
+  const project = await ctx.db.get(file.projectId);
+  if (!project || project.ownerId !== identity.subject) return null;
+  return file;
+};
+
+// All files and folders of a project (used by the preview, Chapter 14)
+export const getFiles = query({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, args) => {
+    await getOwnedProject(ctx, args.projectId);
+    return await ctx.db
+      .query("files")
+      .withIndex("by_project", (q) => q.eq("projectId", args.projectId))
+      .collect();
+  },
+});
+
+// One file with its content (the editor), or null if it no longer exists
+export const getFile = query({
+  args: { id: v.id("files") },
+  handler: async (ctx, args) => {
+    return await getOwnedFileOrNull(ctx, args.id);
+  },
+});
+
+// The path from the root down to a file, for breadcrumbs, by walking up parentId:
+// e.g. [{ name: "src" }, { name: "app" }, { name: "page.tsx" }]. null if the file is gone.
+export const getFilePath = query({
+  args: { id: v.id("files") },
+  handler: async (ctx, args) => {
+    const file = await getOwnedFileOrNull(ctx, args.id);
+    if (!file) return null;
+
+    const path: { _id: Id<"files">; name: string }[] = [];
+    let current: typeof file | null = file;
+    while (current) {
+      path.unshift({ _id: current._id, name: current.name });
+      current = current.parentId ? await ctx.db.get(current.parentId) : null;
+    }
+    return path;
+  },
+});
+
+// Save a text file's content (the editor's auto-save)
+export const updateFile = mutation({
+  args: {
+    id: v.id("files"),
+    content: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const file = await getOwnedFileOrNull(ctx, args.id);
+    if (!file) throw new Error("File not found");
+
+    const now = Date.now();
+    await ctx.db.patch(args.id, { content: args.content, updatedAt: now });
+    await touchProject(ctx, file.projectId, now);
+  },
+});
+
 // One folder's contents, sorted: folders first, then files, each alphabetically
 export const getFolderContents = query({
   args: {

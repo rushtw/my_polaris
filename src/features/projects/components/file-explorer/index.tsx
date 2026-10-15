@@ -24,7 +24,6 @@ export const FileExplorer = ({ projectId: projectIdParam }: { projectId: string 
   const [isOpen, setIsOpen] = useState(true);
   const [collapseKey, setCollapseKey] = useState(0);
   const [creating, setCreating] = useState<"file" | "folder" | null>(null);
-  const [selectedId, setSelectedId] = useState<Id<"files"> | null>(null);
 
   const project = useProject(projectId);
   const rootFiles = useFolderContents({ projectId, enabled: isOpen }); // no parentId = root
@@ -116,8 +115,6 @@ export const FileExplorer = ({ projectId: projectIdParam }: { projectId: string 
                 item={item}
                 level={0}
                 projectId={projectId}
-                selectedId={selectedId}
-                onSelect={setSelectedId}
               />
             ))}
             {rootFiles?.length === 0 && !creating && (

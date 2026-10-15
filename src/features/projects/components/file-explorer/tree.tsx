@@ -12,6 +12,7 @@ import {
   useFolderContents,
   useRenameFile,
 } from "@/features/projects/hooks/use-files";
+import { useEditor } from "@/features/editor/hooks/use-editor";
 
 import { LoadingRow } from "./loading-row";
 import { CreateInput } from "./create-input";
@@ -30,14 +31,10 @@ export const Tree = ({
   item,
   level = 0,
   projectId,
-  selectedId,
-  onSelect,
 }: {
   item: Doc<"files">;
   level?: number;
   projectId: Id<"projects">;
-  selectedId: Id<"files"> | null; // highlighted file (the editor will take over in Chapter 10)
-  onSelect: (id: Id<"files"> | null) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
@@ -47,6 +44,9 @@ export const Tree = ({
   const deleteFile = useDeleteFile();
   const createFile = useCreateFile();
   const createFolder = useCreateFolder();
+
+  // The editor's tabs (zustand store): open files, and which one is active
+  const { openFile, closeTab, activeTabId } = useEditor(projectId);
 
   // A folder's children are only loaded while it's open ("skip" otherwise)
   const folderContents = useFolderContents({
@@ -62,7 +62,7 @@ export const Tree = ({
   };
 
   const handleDelete = () => {
-    if (selectedId === item._id) onSelect(null);
+    if (item.type === "file") closeTab(item._id); // close its editor tab first
     reportErrors(deleteFile({ id: item._id }));
   };
 
@@ -99,8 +99,9 @@ export const Tree = ({
       <TreeItemWrapper
         item={item}
         level={level}
-        isActive={selectedId === item._id}
-        onClick={() => onSelect(item._id)} // Chapter 10: open it in the editor
+        isActive={activeTabId === item._id}
+        onClick={() => openFile(item._id, { pinned: false })} // preview tab (italic)
+        onDoubleClick={() => openFile(item._id, { pinned: true })} // pinned tab
         onRename={() => setIsRenaming(true)}
         onDelete={handleDelete}
       >
@@ -160,8 +161,6 @@ export const Tree = ({
               item={subItem}
               level={level + 1}
               projectId={projectId}
-              selectedId={selectedId}
-              onSelect={onSelect}
             />
           ))}
         </>
