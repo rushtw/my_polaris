@@ -10,6 +10,9 @@ import { minimap } from "../extensions/minimap";
 import { customTheme } from "../extensions/theme";
 import { customSetup } from "../extensions/custom-setup";
 import { getLanguageExtension } from "../extensions/language-extension";
+import { suggestion } from "../extensions/suggestion";
+import { quickEdit } from "../extensions/quick-edit";
+import { selectionTooltip } from "../extensions/selection-tooltip";
 
 interface CodeEditorProps {
   fileName: string;
@@ -42,6 +45,9 @@ export const CodeEditor = ({ fileName, initialValue = "", onChange }: CodeEditor
         customTheme,
         customSetup,
         languageExtension,
+        suggestion(fileName), // AI ghost text; its Tab must come before indentWithTab
+        quickEdit(), // Ctrl/⌘ K: rewrite the selection with AI
+        selectionTooltip(), // the "Quick Edit" button under a selection
         keymap.of([indentWithTab]), // Tab indents instead of leaving the editor
         minimap(),
         indentationMarkers(),
@@ -50,7 +56,6 @@ export const CodeEditor = ({ fileName, initialValue = "", onChange }: CodeEditor
             onChangeRef.current(update.state.doc.toString());
           }
         }),
-        // Chapter 11 adds the AI extensions here: suggestion, quickEdit, selectionTooltip
       ],
     });
 
